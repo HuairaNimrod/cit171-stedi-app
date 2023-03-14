@@ -6,6 +6,7 @@ import OnboardingScreen from './screens/OnboardingScreen';
 import Home from './screens/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 import image from './image/logo.png';
 
@@ -24,6 +25,27 @@ const App = () =>{
   const [phoneNumber,setPhoneNumber] = React.useState("");
   const [oneTimePassword, setOneTimePassword] = React.useState("");
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
+  const [isBiometricSupported, setIsBiometricSupported] = React.useState(false);
+  const [isBiometricEnrolled, setIsBiometricEnrolled] = React.useState(false);
+
+
+useEffect(() => {
+(async() => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+
+      console.log("compatible", compatible);
+
+      setIsBiometricSupported(compatible);
+
+      const enrolled  = await LocalAuthentication.isEnrolledAsync();
+      console.log("enrolled", enrolled);
+      setIsBiometricEnrolled(enrolled);  // check is face or fingerprint authentications is available in the device
+  })();
+
+});
+
+
+
 
   useEffect(()=>{//this is code that has to run before we show app screen
    const getSessionToken = async()=>{
@@ -58,6 +80,8 @@ return(
     return (
       <View>
         <Text style={styles.title}>Welcome Back</Text>
+        
+        <Text style={styles.title}>Welcome Back</Text>
         <TextInput 
           value={phoneNumber}
           onChangeText={setPhoneNumber}
@@ -87,7 +111,17 @@ return(
               setLoggedInState(loggedInStates.LOGGING_IN);
             }
           }}
-        />      
+        />   
+        <Text > {isBiometricSupported 
+                  ? 'Your device is complatible with biometrics'
+                  : 'Your device is not compatible with biometrics'
+                  }
+        </Text>
+        <Text> {isBiometricEnrolled 
+                  ? 'Your have a fingerprint or face biometric'
+                  : 'Your have not save a fingerpritn or face biometric'
+                  }
+        </Text>   
         {/* </ImageBackground> */}
       </View>
     )
