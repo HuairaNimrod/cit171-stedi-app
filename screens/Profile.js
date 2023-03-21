@@ -46,17 +46,18 @@ const Profile = (props) => {
   });
 
   const myCustomerShare = async() =>{
-    const shareOptions = {
-      message: 'This is a test'
+        const shareOptions = {
+          message: 'This is a test'
+        }
+        try{
+            const shareResponse = await Share.share(shareOptions)
+            console.log(shareResponse);
+            }
+        catch(error){
+            console.log('Error', error)
+          }
     }
-    try{
-      const shareResponse = await Share.share(shareOptions)
-      console.log(shareResponse);
-      }
-      catch(error){
-  console.log('Error', error)
-      }
-    }
+    
     if(profilePhoto==null){
       const cameraOptions={
         quality:0,

@@ -59,6 +59,20 @@ export default function Counter(props) {
   }, 1000);
 }, [counter, currentScreen]);
 
+
+const myCustomerShare = async() =>{
+  const shareOptions = {
+    message: 'https://dev.stedi.me/timer.html#' + token.current
+  }
+  try{
+      const shareResponse = await Share.share(shareOptions)
+      console.log(shareResponse);
+      }
+  catch(error){
+      console.log('Error', error)
+    }
+}
+
  const clockify = () =>{
   let hours = Math.floor(counter / 60 / 60);
   let mins=  Math.floor(counter / 60 % 60);
@@ -321,12 +335,19 @@ elevation: 4}}>
    <Image source={exerciseImg}  style={styles.image} ></Image>
 <CardContent>
   <Text style={styles.text}>Step Quickly</Text>
-  <TouchableOpacity
-     onPress={ subscription ? _unsubscribe : _subscribe}
-      style={styles.button}
-    >
-      <Text>{subscription ? 'Stop' : 'GO'}</Text>
+      <TouchableOpacity
+             onPress={ subscription ? _unsubscribe : _subscribe}
+              style={styles.button}
+      >
+        <Text>{subscription ? 'Stop' : 'GO'}</Text>
      </TouchableOpacity>
+
+     <TouchableOpacity
+        onPress={myCustomerShare}
+        style={styles.button}
+      >
+          <Text>Share</Text>
+    </TouchableOpacity>
 
      </CardContent>
      <ProgressBar progress={(stepCount * 0.50/30) + (completionCount * 0.50)} width={300} height={25} color={'#A0CE4E'} style={styles.bar}/>
@@ -432,8 +453,8 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 15,
-    marginBottom: 20,
+    marginTop: 5,
+    marginBottom: 8,
     width: 170,
     height: 38,
     justifyContent: 'center',
